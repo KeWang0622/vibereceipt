@@ -1,0 +1,45 @@
+{
+  "name": "vibereceipt",
+  "version": "0.1.0",
+  "description": "Your week, itemized. A thermal-receipt-style SVG of your habits — credits for moving + sleeping, debits for doomscrolling. Runs locally, your data never leaves your laptop.",
+  "type": "module",
+  "bin": {
+    "vibereceipt": "dist/src/index.js"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "prepare": "npm run build",
+    "start": "node dist/src/index.js",
+    "test": "node --test dist/test/pricing.test.js dist/test/render.test.js dist/test/determinism.test.js"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "license": "MIT",
+  "author": "Ke Wang",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/KeWang0622/vibereceipt.git"
+  },
+  "homepage": "https://github.com/KeWang0622/vibereceipt#readme",
+  "keywords": [
+    "health",
+    "habit-tracker",
+    "receipt",
+    "svg",
+    "claude-code",
+    "agent-skill",
+    "wellness",
+    "cli",
+    "self-tracking"
+  ],
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "typescript": "^5.4.0"
+  }
+}

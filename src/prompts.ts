@@ -14,10 +14,12 @@ async function askStr(rl: ReturnType<typeof createInterface>, q: string): Promis
   return raw;
 }
 
-export async function interactiveWeek(): Promise<WeekInput> {
+export async function interactiveWeek(defaultWeekLabel: string): Promise<WeekInput> {
   const rl = createInterface({ input: stdin, output: stdout });
   try {
-    stdout.write("vibe mart — answer 8 quick questions about your past 7 days (press enter to skip):\n\n");
+    stdout.write("vibe mart — answer 9 quick questions about your past 7 days (press enter to skip):\n\n");
+    const week_label_raw = await askStr(rl, `  week label? (e.g. ${defaultWeekLabel}) > `);
+    const date_label = week_label_raw || defaultWeekLabel;
     const movement_sessions   = await askNum(rl, "  how many workouts/walks? (e.g. 4) > ", 0);
     const water_liters        = await askNum(rl, "  total water (liters)? (e.g. 7) > ", 0);
     const sleep_hours_avg     = await askNum(rl, "  avg sleep hours/night? (e.g. 6.5) > ", 0);
@@ -29,6 +31,7 @@ export async function interactiveWeek(): Promise<WeekInput> {
     const random_joy          = await askStr(rl, "  one good thing this week (≤20 chars, optional) > ");
     stdout.write("\n");
     return {
+      date_label,
       movement_sessions, water_liters, sleep_hours_avg,
       read_minutes_total, sunlight_minutes_total,
       doomscroll_hours, skipped_gym, late_night_anxiety,

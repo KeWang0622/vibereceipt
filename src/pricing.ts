@@ -12,7 +12,7 @@ export interface WeekInput {
   skipped_gym: number;           // count of skipped commitments
   late_night_anxiety: number;    // count of 3am-thought nights
   random_joy?: string;           // free-form "found $20" line (optional)
-  date_label?: string;           // e.g. "2026-W19"
+  date_label: string;            // e.g. "2026-W19" — REQUIRED, no clock fallback
 }
 
 export interface LineItem {
@@ -82,9 +82,8 @@ export function priceWeek(input: WeekInput): ReceiptData {
 
   const total = subtotal + (bonus?.amount ?? 0);
   const stars = starRating(total);
-  const date_label = input.date_label || isoWeekLabel(new Date());
 
-  return { date_label, credits, debits, bonus, subtotal, total, stars };
+  return { date_label: input.date_label, credits, debits, bonus, subtotal, total, stars };
 }
 
 function sum(items: LineItem[]): number {
@@ -97,15 +96,6 @@ function starRating(total: number): number {
   if (total >= 20) return 3;
   if (total >= 0)  return 2;
   return 1;
-}
-
-function isoWeekLabel(d: Date): string {
-  const t = new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate()));
-  const dayNum = t.getUTCDay() || 7;
-  t.setUTCDate(t.getUTCDate() + 4 - dayNum);
-  const yearStart = new Date(Date.UTC(t.getUTCFullYear(), 0, 1));
-  const weekNum = Math.ceil(((t.getTime() - yearStart.getTime()) / 86400000 + 1) / 7);
-  return `${t.getUTCFullYear()}-W${String(weekNum).padStart(2, "0")}`;
 }
 
 export function demoWeek(): WeekInput {

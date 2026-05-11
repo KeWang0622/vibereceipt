@@ -5,6 +5,19 @@ import { priceWeek, demoWeek, type WeekInput } from "./pricing.js";
 import { renderReceipt } from "./render.js";
 import { interactiveWeek } from "./prompts.js";
 
+// Compute current ISO week label as a *display default* for interactive mode.
+// The artifact itself never embeds this without explicit user confirmation —
+// keeps the byte-identical-per-week property intact.
+function todayWeekLabel(): string {
+  const d = new Date();
+  const t = new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate()));
+  const dayNum = t.getUTCDay() || 7;
+  t.setUTCDate(t.getUTCDate() + 4 - dayNum);
+  const yearStart = new Date(Date.UTC(t.getUTCFullYear(), 0, 1));
+  const weekNum = Math.ceil(((t.getTime() - yearStart.getTime()) / 86400000 + 1) / 7);
+  return `${t.getUTCFullYear()}-W${String(weekNum).padStart(2, "0")}`;
+}
+
 function usage(): never {
   process.stdout.write(
     [
@@ -51,8 +64,12 @@ async function main(): Promise<void> {
       process.exit(2);
     }
     week = JSON.parse(readFileSync(resolve(input), "utf8"));
+    if (!week.date_label) {
+      process.stderr.write("vibereceipt: input JSON must include `date_label` (e.g. \"2026-W19\")\n");
+      process.exit(2);
+    }
   } else {
-    week = await interactiveWeek();
+    week = await interactiveWeek(todayWeekLabel());
   }
 
   const data = priceWeek(week);

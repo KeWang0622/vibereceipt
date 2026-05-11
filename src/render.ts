@@ -20,9 +20,12 @@ function fmt(amount: number): string {
 function row(y: number, label: string, amount: number): string {
   const labelX = PAD;
   const amountX = W - PAD;
+  // Debits get a slightly redder ink — same monospace, just darker red — so the
+  // joke (DOOMSCROLL 14h −$21) is legible at thumbnail size.
+  const fill = amount < 0 ? "#7f1d1d" : "#111";
   return `
-    <text x="${labelX}" y="${y}" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" font-size="20" fill="#111">${esc(label)}</text>
-    <text x="${amountX}" y="${y}" text-anchor="end" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" font-size="20" fill="#111">${esc(fmt(amount))}</text>`;
+    <text x="${labelX}" y="${y}" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" font-size="20" fill="${fill}">${esc(label)}</text>
+    <text x="${amountX}" y="${y}" text-anchor="end" font-family="ui-monospace, 'SF Mono', Menlo, Consolas, monospace" font-size="20" fill="${fill}">${esc(fmt(amount))}</text>`;
 }
 
 function divider(y: number): string {

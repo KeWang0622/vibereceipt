@@ -13,6 +13,7 @@ test("demoWeek prices to a known positive total", () => {
 
 test("all-zero week is a Common rating", () => {
   const r = priceWeek({
+    date_label: "2026-W19",
     movement_sessions: 0, water_liters: 0, sleep_hours_avg: 0,
     read_minutes_total: 0, sunlight_minutes_total: 0,
     doomscroll_hours: 0, skipped_gym: 0, late_night_anxiety: 0,
@@ -25,6 +26,7 @@ test("all-zero week is a Common rating", () => {
 
 test("doomscroll-heavy week goes negative", () => {
   const r = priceWeek({
+    date_label: "2026-W19",
     movement_sessions: 0, water_liters: 0, sleep_hours_avg: 0,
     read_minutes_total: 0, sunlight_minutes_total: 0,
     doomscroll_hours: 30, skipped_gym: 5, late_night_anxiety: 4,
